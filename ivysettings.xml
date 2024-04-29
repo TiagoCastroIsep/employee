@@ -1,0 +1,13 @@
+<ivysettings>
+    <!-- Default resolver -->
+    <settings defaultResolver="central"/>
+
+    <!-- Define repositories -->
+    <resolvers>
+        <!-- Ivy repository -->
+        <ibiblio name="central" m2compatible="true" root="https://mvnrepository.com/artifact/"/>
+    </resolvers>
+
+    <!-- Cache location -->
+    <caches defaultCacheDir="${user.home}/.ivy2/cache"/>
+</ivysettings>

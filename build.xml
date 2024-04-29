@@ -1,0 +1,67 @@
+<project
+        xmlns:ivy="antlib:org.apache.ivy.ant"
+        xmlns:spring-boot="antlib:org.springframework.boot.ant"
+        name="react-and-spring-data-rest-basic" default="build">
+
+    <!-- Define properties -->
+    <property name="spring-boot.version" value="3.2.4"/>
+    <property name="resource.dir" value="src/main/resources"/>
+    <property name="thymeleaf.dir" value="src/main/resources/templates"/>
+    <property name="build.dir" value="build"/>
+    <property name="resources.dir" value="./src/main/resources/"/>
+    <property name="static.dir" value="./src/main/resources/static/built"/>
+    <property name="destination.dir" value="build/classes"/>
+
+    <path id="maven-ant-tasks.classpath" path="lib/maven-ant-tasks-2.1.3.jar"/>
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant"
+             classpathref="maven-ant-tasks.classpath"/>
+
+    <target name="resolve" description="--> retrieve dependencies with ivy">
+        <ivy:retrieve pattern="lib/[conf]/[artifact]-[type]-[revision].[ext]"/>
+    </target>
+
+    <target name="classpaths" depends="resolve">
+        <path id="compile.classpath">
+            <fileset dir="lib/compile" includes="*.jar"/>
+        </path>
+    </target>
+
+    <target name="init" depends="classpaths">
+        <mkdir dir="build/classes"/>
+        <copy todir="build/classes">
+            <fileset dir="src/main/resources" includes="**/*.properties"/>
+            <fileset dir="src/main/resources/" includes="**/*.html"/>
+        </copy>
+    </target>
+
+    <target name="compile" depends="init" description="compile">
+        <javac srcdir="src/main/java" destdir="build/classes" classpathref="compile.classpath" includeantruntime="false" />
+    </target>
+
+    <target name="build" depends="compile">
+        <exec executable="cmd">
+            <arg line="/c npm install"/>
+        </exec>
+        <exec executable="cmd">
+            <arg line="/c npm run build"/>
+        </exec>
+        <copy todir="${destination.dir}">
+            <fileset dir="${resources.dir}" />
+            <fileset dir="${static.dir}" includes="**/bundle.js/bundle.js.map"/>
+        </copy>
+        <spring-boot:exejar destfile="build/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.jar"
+                            classes="build/classes">
+            <spring-boot:lib>
+                <fileset dir="lib/runtime"/>
+            </spring-boot:lib>
+        </spring-boot:exejar>
+    </target>
+
+    <target name="run" depends="build">
+        <java jar="build/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.jar" fork="true">
+            <classpath>
+                <pathelement location="lib/runtime/h2-1.4.200.jar"/>
+            </classpath>
+        </java>
+    </target>
+</project>

@@ -1,0 +1,33 @@
+<ivy-module version="2.0">
+    <info organisation="org.springframework.boot" module="spring-boot-sample-ant" />
+    <configurations>
+        <conf name="compile" description="everything needed to compile this module" />
+        <conf name="runtime" extends="compile" description="everything needed to run this module" />
+        <conf name="test" extends="compile" description="everything needed to run tests" />
+    </configurations>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-antlib -->
+        <dependency org="org.springframework.boot" name="spring-boot-antlib" rev="3.2.4"/>
+
+        <dependency org="org.springframework.boot" name="spring-boot-starter" rev="${spring-boot.version}" conf="compile" />
+        <!-- Spring Boot Starter Data JPA -->
+        <dependency org="org.springframework.boot" name="spring-boot-starter-data-jpa" rev="${spring-boot.version}" conf="compile" />
+
+        <!-- Spring Boot Starter Data REST -->
+        <dependency org="org.springframework.boot" name="spring-boot-starter-data-rest" rev="${spring-boot.version}" conf="compile" />
+
+        <!-- Spring Boot Starter Thymeleaf -->
+        <dependency org="org.springframework.boot" name="spring-boot-starter-thymeleaf" rev="${spring-boot.version}" conf="compile" />
+
+        <!-- H2 Database -->
+        <dependency org="com.h2database" name="h2" rev="1.4.200" conf="compile" />
+
+        <!-- Spring Boot Starter Test -->
+        <dependency org="org.springframework.boot" name="spring-boot-starter-test" rev="${spring-boot.version}" conf="test" />
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+        <dependency org="org.springframework" name="spring-core" rev="6.1.6"/>
+
+    </dependencies>
+</ivy-module>
